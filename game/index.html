@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Duel Arkanum — Duel Kartu</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="game-title">🂡 DUEL ARKANUM</div>
+    <div id="turn-badge">Ronde 1 — Giliranmu</div>
+    <button id="sound-toggle" type="button">🔊 Suara hidup</button>
+    <button id="restart" type="button">↻ Duel Baru</button>
+    <button id="end-turn" type="button">⏎ Akhiri Giliran (Enter)</button>
+  </header>
+
+  <section id="ai-zone" aria-label="Meja lawan"></section>
+
+  <div id="mid-bar">
+    <div id="log" aria-live="polite"></div>
+    <div id="hint"></div>
+  </div>
+
+  <section id="player-zone" aria-label="Mejamu">
+    <div id="player-hero-box"></div>
+    <div id="player-board" class="board-row" aria-label="Makhlukmu"></div>
+  </section>
+  <div id="player-hand" aria-label="Tanganmu"></div>
+</div>
+
+<div id="overlay-title" class="overlay">
+  <div class="overlay-card">
+    <h1>🂡 DUEL ARKANUM</h1>
+    <h2>Duel kartu giliran melawan Mira, Penjaga Menara</h2>
+    <p>Kalahkan Mira sebelum nyawamu habis. Mainkan makhluk dari tanganmu,
+    serang dengan mereka, dan lemparkan mantra di saat yang tepat.</p>
+    <div class="rules">
+      <div>❤ <b>Nyawa 30</b> — habiskan nyawa lawan untuk menang.</div>
+      <div>◆ <b>Mana</b> — bertambah 1 tiap ronde, sampai 10. Kartu butuh mana.</div>
+      <div>⚔️ / ❤ <b>Makhluk</b> — menyerang sekali tiap ronde, mulai ronde berikutnya.</div>
+      <div>✦ <b>Mantra</b> — luka, pulih, ambil kartu, atau guncang meja lawan.</div>
+      <div>🔥 💧 🍃 🪨 <b>Empat elemen</b> — Api, Air, Daun, dan Batu.</div>
+    </div>
+    <button id="start-btn" class="big-btn" type="button">▶ MULAI DUEL</button>
+    <div class="keys">Mouse untuk bermain · 1–7 pilih kartu · Enter akhiri giliran · Esc batal · R main lagi · M suara</div>
+  </div>
+</div>
+
+<div id="overlay-end" class="overlay hidden">
+  <div class="overlay-card">
+    <div id="end-title" class="end-title win">🏆 MENANG!</div>
+    <p id="end-sub"></p>
+    <p id="end-stats"></p>
+    <button id="again-btn" class="big-btn" type="button">↻ MAIN LAGI (R)</button>
+    <div class="keys">Duel Arkanum — permainan kartu orisinal, berjalan luring di peramban.</div>
+  </div>
+</div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
