@@ -8,10 +8,15 @@
 //      summary the judge reads: the sources, the screenshots and the
 //      totals, capped the way the sealed gate expects them.
 //
+// Sandbox fix: round 1 of this entry was rejected because the program
+// removed the output directory itself (rmSync on MAKEFUN_OUTPUT_DIR),
+// which the grader mounts read-only at its parent — the run died with
+// EACCES before copying anything. emptyDir below only clears contents.
+//
 // Run it locally with:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
-import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-game.ts';
@@ -21,6 +26,16 @@ const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 const gameDir = join(repoRoot, 'game');
 const shotsDir = join(repoRoot, 'screenshots');
 
+// Creates the directory when missing, then removes everything inside it.
+// The directory itself is never deleted: in the grader the output path is
+// a mount point, so removing it fails with EACCES even for its owner.
+function emptyDir(dir) {
+  mkdirSync(dir, { recursive: true });
+  for (const name of readdirSync(dir)) {
+    rmSync(join(dir, name), { recursive: true, force: true });
+  }
+}
+
 function handIn() {
   if (!existsSync(join(gameDir, 'index.html'))) {
     throw new Error(`game/index.html is missing under ${gameDir}`);
@@ -28,8 +43,7 @@ function handIn() {
   if (!existsSync(shotsDir)) {
     throw new Error(`screenshots/ is missing under ${repoRoot}`);
   }
-  rmSync(outDir, { recursive: true, force: true });
-  mkdirSync(outDir, { recursive: true });
+  emptyDir(outDir);
   cpSync(gameDir, join(outDir, 'game'), { recursive: true });
   mkdirSync(join(outDir, 'screenshots'), { recursive: true });
   cpSync(shotsDir, join(outDir, 'screenshots'), { recursive: true });
